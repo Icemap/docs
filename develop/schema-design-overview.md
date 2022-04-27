@@ -8,106 +8,110 @@ This page gives an overview of the database schema in TiDB. We will start from t
 
 > **Note:**
 >
-> 此处将术语会有歧义，为消除歧义，在此作出数据库模式设计文档部分中的术语简要约定：
+> To avoid confusion with the general term, Here is a brief agreement on the term used in the database schema design documentation section:
 >
-> 1. 为避免和通用术语[数据库 (Database)](https://en.wikipedia.org/wiki/Database)混淆，我们将逻辑对象称为`数据库 (Database)`，TiDB 仍使用原名称，并将 TiDB 的部署实例称为`集群 (Cluster)`。
-> 2. 因为 TiDB 使用与 MySQL 兼容的语法，在此语法下，`模式 (Schema)` 仅代表[通用术语定义](https://en.wiktionary.org/wiki/schema)，并无逻辑对象定义，可参考此[官方文档](https://dev.mysql.com/doc/refman/8.0/en/create-database.html)。若您从其他拥有 `Schema` 逻辑对象的数据库（如：[PostgreSQL](https://www.postgresql.org/docs/current/ddl-schemas.html)、[Oracle](https://docs.oracle.com/en/database/oracle/oracle-database/21/tdddg/creating-managing-schema-objects.html)、[Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/relational-databases/security/authentication-access/create-a-database-schema?view=sql-server-ver15) 等）迁移而来，请注意此区别。
+> 1. To avoid confusion with the generic term [Database](https://en.wikipedia.org/wiki/Database), we will refer to the logical object as `Database`, TiDB will still use the `TiDB`, and the deployed instances of TiDB will be referred to as `Cluster`.
+> 2. Because TiDB uses a MySQL-compatible syntax, under this syntax, `Schema` represents a [generic term definition only](https://en.wiktionary.org/wiki/schema), and there is no `logical object definition`, can be found in this [official document](https://dev.mysql.com/doc/refman/8.0/en/create-database.html). Please note this difference if you are migrating from other databases that have Schema logical objects (e.g. [PostgreSQL](https://www.postgresql.org/docs/current/ddl-schemas.html), [Oracle](https://docs.oracle.com/en/database/oracle/oracle-database/21/tdddg/creating-managing-schema-objects.html), [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/relational-databases/security/authentication-access/create-a-database-schema?view=sql-server-ver15), etc.).
 
-## 数据库 Database
+## Database
 
-TiDB 语境中的 Database 或者说数据库，可以认为是表和索引等对象的集合。
+Database in the TiDB can be thought of as a collection of objects such as tables and indexes.
 
-TiDB 集群包含一个名为 `test` 的数据库。但我们建议您自行创建数据库，而不是使用 `test` 数据库。
+TiDB clusters contain a database named `test`. However, we recommend that you create your own database instead of using the `test` database.
 
-## 表 Table
+## Table
 
-TiDB 语境中的 Table 或者说表，从属于某个[数据库](#数据库-database)。
+A Table in the TiDB, is subordinate to a [Database](#database).
 
-表包含数据`行`。每行数据中的每个值都属于一个特定的`列`。每列都只允许单一数据类型的数据值。列可添加[约束](https://docs.pingcap.com/zh/tidb/stable/constraints)来进一步限定。你还可以添加[生成列（实验特性）](https://docs.pingcap.com/zh/tidb/stable/generated-columns)用于计算。
+A table contains `rows`. Each value in each row of data belongs to a specific `column`. Each column allows only a single data type. Columns can be further qualified by adding [constraints](https://docs.pingcap.com/tidb/stable/constraints). You can also add [generated columns (experimental feature)](https://docs.pingcap.com/tidb/stable/generated-columns) for calculations.
 
-## 索引 Index
+## Index
 
-索引是单个表中行的副本，按列或列集排序。TiDB 查询使用索引来更有效的查找表内的数据，同时可以给出特定列的值。每个索引都是从属于某个[表](#表-table)的。
+An index is a copy of rows in a single table, sorted by a column or set of columns.TiDB queries use indexes to find data in a table more efficiently, while giving values for specific columns. Each index is subordinate to a particular [table](#table).
 
-索引有两种常见的类型，分别为：
+There are two common types of indexes:
 
-1. `Primary Key`: 即主键索引，即标识在主键列上的索引
-2. `Secondary Index`: 即二级索引，即在非主键上标识的索引
+1. `Primary Key`: Indexes that are identified on the primary key column.
+2. `Secondary Index`: Indexes identified on non-primary keys
 
 > **Note:**
 >
-> TiDB 中，关于 `Primary Key` 的默认定义与 MySQL 常用存储引擎 [InnoDB](https://mariadb.com/kb/en/innodb/) 不一致。`InnoDB` 中，`Primary Key` 的语义为：唯一，不为空，**且为聚簇索引**。
+> In TiDB, the default definition of `Primary Key` is different from [InnoDB](https://mariadb.com/kb/en/innodb/)(the common storage engine of MySQL). In `InnoDB`, The semantics of `Primary Key` is unique, not null, and **index clustered**.
 >
-> 而在 TiDB 中，`Primary Key` 的定义为：唯一，不为空。但主键不保证为**聚簇索引**。而是由另一组关键字 `CLUSTERED` / `NONCLUSTERED` 额外控制 `Primary Key` 是否为聚簇索引，若不指定，则由系统变量 `@@global.tidb_enable_clustered_index` 影响，具体说明请看[此文档](https://docs.pingcap.com/zh/tidb/stable/clustered-indexes)。
+> However, in TiDB, the definition of `Primary Key` is: unique, not null. But the primary key is not guaranteed to be a **clustered index**. Instead, another set of keywords `CLUSTERED` / `NONCLUSTERED` additionally controls whether the `Primary Key` is a `Clustered Index`, and if not specified, is affected by the system variable `@@global.tidb_enable_clustered_index`, as described in [this document](https://docs.pingcap.com/zh/tidb/stable/clustered-indexes).
 
-### 专用索引
+### Specialized indexes
 
-TiDB 支持一些特殊场景专用的索引，用以提高特定用例中的查询性能。有关这些专用索引的指导，请参阅以下页面：
+TiDB supports some specialized types of indexes, designed to improve query performance in specific use cases. For guidance on specialized indexes, see the following table:
 
-|                                                           索引和约束                                                           |   5.4    |   5.3    |   5.2    |   5.1    |   5.0    |   4.0    |
-| :----------------------------------------------------------------------------------------------------------------------------: | :------: | :------: | :------: | :------: | :------: | :------: |
-| [表达式索引](https://docs.pingcap.com/zh/tidb/stable/sql-statement-create-index#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%B4%A2%E5%BC%95) | 实验特性 | 实验特性 | 实验特性 | 实验特性 | 实验特性 | 实验特性 |
-|                         [列式存储 (TiFlash)](https://docs.pingcap.com/zh/tidb/stable/tiflash-overview)                         |    Y     |    Y     |    Y     |    Y     |    Y     |    Y     |
-|                            [RocksDB 引擎](https://docs.pingcap.com/zh/tidb/stable/rocksdb-overview)                            |    Y     |    Y     |    Y     |    Y     |    Y     |    Y     |
-|                              [Titan 插件](https://docs.pingcap.com/zh/tidb/stable/titan-overview)                              |    Y     |    Y     |    Y     |    Y     |    Y     |    Y     |
-|                         [不可见索引](https://docs.pingcap.com/zh/tidb/stable/sql-statement-add-index)                          |    Y     |    Y     |    Y     |    Y     |    Y     |    N     |
-|              [复合主键](https://docs.pingcap.com/zh/tidb/stable/constraints#%E4%B8%BB%E9%94%AE%E7%BA%A6%E6%9D%9F)              |    Y     |    Y     |    Y     |    Y     |    Y     |    Y     |
-|              [唯一约束](https://docs.pingcap.com/zh/tidb/stable/constraints#%E5%94%AF%E4%B8%80%E7%BA%A6%E6%9D%9F)              |    Y     |    Y     |    Y     |    Y     |    Y     |    Y     |
-|                          [整型主键上的聚簇索引](https://docs.pingcap.com/zh/tidb/stable/constraints)                           |    Y     |    Y     |    Y     |    Y     |    Y     |    Y     |
-|                      [复合或非整型主键上的聚簇索引](https://docs.pingcap.com/zh/tidb/stable/constraints)                       |    Y     |    Y     |    Y     |    Y     |    Y     |    N     |
+| Indexing and constraints                                     | **5.4**          |   **5.3**    |   **5.2**    |   **5.1**    |   **5.0**    |   **4.0**    |
+| ------------------------------------------------------------ | ------------ | :----------: | :----------: | :----------: | :----------: | :----------: |
+| [Expression indexes](/sql-statements/sql-statement-create-index.md#expression-index) | Experimental | Experimental | Experimental | Experimental | Experimental | Experimental |
+| [Columnar storage (TiFlash)](/tiflash/tiflash-overview.md)   | Y            |      Y       |      Y       |      Y       |      Y       |      Y       |
+| [RocksDB engine](/storage-engine/rocksdb-overview.md)        | Y            |      Y       |      Y       |      Y       |      Y       |      Y       |
+| [Titan plugin](/storage-engine/titan-overview.md)            | Y            |      Y       |      Y       |      Y       |      Y       |      Y       |
+| [Invisible indexes](/sql-statements/sql-statement-add-index.md) | Y            |      Y       |      Y       |      Y       |      Y       |      N       |
+| [Composite `PRIMARY KEY`](/constraints.md)                   | Y            |      Y       |      Y       |      Y       |      Y       |      Y       |
+| [Unique indexes](/constraints.md)                            | Y            |      Y       |      Y       |      Y       |      Y       |      Y       |
+| [Clustered index on integer `PRIMARY KEY`](/constraints.md)  | Y            |      Y       |      Y       |      Y       |      Y       |      Y       |
+| [Clustered index on composite or non-integer key](/constraints.md) | Y            |      Y       |      Y       |      Y       |      Y       |      N       |
 
-## 其他对象
+## Other logical objects
 
-TiDB 支持一些和`表`同级的对象：
+TiDB supports several logical objects at the same level as `table`:
 
-1. [视图](https://docs.pingcap.com/zh/tidb/stable/views): 视图是一张虚拟表，该虚拟表的结构由创建视图时的 `SELECT` 语句定义，TiDB 目前不支持物化视图。
-2. [序列](https://docs.pingcap.com/zh/tidb/stable/sql-statement-create-sequence): 创建和存储顺序数据。
-3. [临时表](https://docs.pingcap.com/zh/tidb/stable/temporary-tables): 临时表是数据不持久化的表。
+1. [Views](https://docs.pingcap.com/tidb/stable/views): A view acts as a virtual table, whose schema is defined by the `SELECT` statement that creates the view.
+2. [Sequence](https://docs.pingcap.com/tidb/stable/sql-statement-create-sequence): Create and store sequential data.
+3. [Temporary tables](https://docs.pingcap.com/tidb/stable/temporary-tables): Temporary table is a table whose data is not persistent.
 
-## 访问控制
+## Access Control
 
-TiDB 支持基于用户或角色的访问控制。你可以通过[角色](https://docs.pingcap.com/zh/tidb/stable/role-based-access-control)或直接指向[用户](https://docs.pingcap.com/zh/tidb/stable/user-account-management)，从而授予`用户`查看、修改或删除 数据对象和数据模式的[权限](https://docs.pingcap.com/zh/tidb/stable/privilege-management)。
+TiDB supports user-based or role-based access control. You can grant `users` [permission](https://docs.pingcap.com/tidb/stable/privilege-management) to view, modify, or delete data objects and data schemas through [roles](https://docs.pingcap.com/tidb/stable/role-based-access-control) or directly to [users](https://docs.pingcap.com/tidb/stable/user-account-management).
 
-## 执行数据库模式更改
+## Execute database schema changes
 
-我们不推荐使用客户端的 Driver 或 ORM 来执行数据库模式的更改。以经验来看，作为最佳实践，我们建议使用 [MySQL 客户端](https://dev.mysql.com/doc/refman/8.0/en/mysql.html)或使用任意你喜欢的 GUI 客户端来进行数据库模式的更改。本文档中，我们将在大多数场景下，使用 `MySQL 客户端` 传入 SQL 文件来执行数据库模式的更改。
+We do not recommend using a Driver or ORM to change database schemas. As a best practice from experience, we recommend using a [MySQL client](https://dev.mysql.com/doc/refman/8.0/en/mysql.html) or using any GUI client you like. In this document, we will execute database schema changes using the `MySQL client`.
 
-## 对象大小限制
+## Object Limitations
 
 此处摘录一些常见的对象大小限制，详细使用限制请查阅[此文档](https://docs.pingcap.com/zh/tidb/stable/tidb-limitations)。
 
-### 标识符长度限制
+These are some of the common object size restrictions, please refer to [this document](https://docs.pingcap.com/tidb/stable/tidb-limitations) for detailed usage restrictions.
 
-|    对象    |  限制   |
-| :--------: | :-----: |
-| 数据库名称 | 64 字符 |
-|   表名称   | 64 字符 |
-|   列名称   | 64 字符 |
-|  索引名称  | 64 字符 |
-|  视图名称  | 64 字符 |
-|  序列名称  | 64 字符 |
+## Limitations on identifier length
 
-### 单个表内限制
+| Identifier type | Maximum length (number of characters allowed) |
+|:---------|:--------------|
+| Database | 64 |
+| Table    | 64 |
+| Column   | 64 |
+| Index    | 64 |
+| View     | 64 |
+| Sequence | 64 |
 
-|      对象      |                                                                                                                   限制                                                                                                                    |
-| :------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|      列数      |                                                                                                       默认为 1017，最大可调至 4096                                                                                                        |
-|     索引数     |                                                                                                         默认为 64，最大可调至 512                                                                                                         |
-|     分区数     |                                                                                                                   8192                                                                                                                    |
-|    单行大小    | 默认为 6MB，可通过 [txn-entry-size-limit](https://docs.pingcap.com/zh/tidb/stable/tidb-configuration-file#txn-entry-size-limit-span-classversion-mark%E4%BB%8E-v50-%E7%89%88%E6%9C%AC%E5%BC%80%E5%A7%8B%E5%BC%95%E5%85%A5span) 配置项调整 |
-| 单行内单列大小 |                                                                                                                    6MB                                                                                                                    |
+## Limitations on a single table
 
-### 字符串类型限制
+| Type       | Upper limit (default value)  |
+|:----------|:----------|
+| Columns   | Defaults to 1017 and can be adjusted up to 4096     |
+| Indexes   |  Defaults to 64 and can be adjusted up to 512        |
+| Partitions | 8192     |
+| Single Line Size | 6 MB by default. You can adjust the size limit via the [`txn-entry-size-limit`](/tidb-configuration-file.md#txn-entry-size-limit-new-in-v50) configuration item. |
+| Single Column in a Line Size | 6 MB       |
 
-|   对象    |    限制    |
-| :-------: | :--------: |
-|   CHAR    |  256 字符  |
-|  BINARY   |  256 字节  |
-| VARBINARY | 65535 字节 |
-|  VARCHAR  | 16383 字符 |
-|   TEXT    |    6MB     |
-|   BLOB    |    6MB     |
+## Limitations on string types
+
+| Type       | Upper limit   |
+|:----------|:----------|
+| CHAR       | 256 characters      |
+| BINARY     | 256 characters      |
+| VARBINARY  | 65535 characters    |
+| VARCHAR    | 16383 characters    |
+| TEXT       | 6 MB                |
+| BLOB       | 6 MB                |
 
 ### 行数
 
 TiDB 可通过增加集群的节点数来支持任意数量的行，原理可阅读[此文档](https://docs.pingcap.com/zh/tidb/stable/tidb-best-practices)
+
+TiDB can support **any** number of rows by add nodes in the cluster, see [this document](https://docs.pingcap.com/tidb/stable/tidb-best-practices) for the mechanics.
