@@ -8,11 +8,11 @@ title: Build the TiDB Application using Spring Boot
 
 This tutorial shows you how to build a [Spring Boot](https://spring.io/projects/spring-boot) Web application using TiDB. The [Spring Data JPA](https://spring.io/projects/spring-data-jpa) module is used as the framework for data access capabilities. The code repository for this sample application can be downloaded from [Github](https://github.com/pingcap-inc/tidb-example-java).
 
-This is a example application for building a Restful API, showing a generic `Spring Boot` backend service using `TiDB` as the database. The following process was designed to recreate a realistic scenario:
+This is an example application for building a Restful API, showing a generic `Spring Boot` backend service using `TiDB` as the database. The following process was designed to recreate a realistic scenario:
 
 This is an example of a game where each player has two attributes: `coins` and `goods`, and each player has a field `id` that uniquely identifies the player. Players can trade freely if they have sufficient coins and goods.
 
-You can use this example as a base to build your own application.
+You can use this example as a base to build your application.
 
 ## Step 1. Launch your TiDB cluster
 
@@ -368,7 +368,7 @@ Click the `Count` tab and the `Send` button to send a Get form of the `http://lo
 
 #### Player Trading
 
-Click on the `Trade` tab and the Send button to send a Put request to `http://localhost:8080/player/trade` with the request parameters are sell player ID `sellID`, buy player ID `buyID`, number of goods purchased `amount`, number of coins consumed for purchase `price`. The return value is whether the transaction is successful or not. When there is insufficient goods for the selling player, insufficient gold for the buying player or database error, the transaction will not be successful and no player's gold or goods will be lost due to the database [transaction](transaction-overview.md) guarantee.
+Click on the `Trade` tab and the Send button to send a Put request to `http://localhost:8080/player/trade` with the request parameters are sell player ID `sellID`, buy player ID `buyID`, number of goods purchased `amount`, number of coins consumed for the purchase `price`. The return value is whether the transaction is successful or not. When there are insufficient goods for the selling player, insufficient gold for the buying player, or database error, the transaction will not be successful and no player's gold or goods will be lost due to the database [transaction](transaction-overview.md) guarantee.
 
 ![Postman-Trade](media/IMG_20220402-003659102.png)  
 
@@ -530,11 +530,11 @@ true
 We have written the request process as a [shell script](https://github.com/pingcap-inc/tidb-example-java/blob/main/spring-jpa-hibernate/request.sh) for your testing purposes and the script will do the following things:
 
 1. create 10 players in a loop
-2. get the information of players with `id` of 1
+2. get the information of players with the `id` of 1
 3. get a list of up to 3 players
-4. get a page of players with `index` of 0 and `size` of 2
+4. get a page of players with the `index` of 0 and the `size` of 2
 5. get the total number of players
-6. the player with `id` of 1 is the seller and the player with id of 2 is the buyer, buy 10 goods and cost 100 gold coins
+6. the player with the `id` of 1 is the seller and the player with the id of 2 is the buyer, buy 10 goods and cost 100 gold coins
 
 You can run this script with `make request` or `./request.sh` command and the result should look like this:
 
@@ -717,7 +717,7 @@ spring:
       ddl-auto: create-drop
 ```
 
-The this [YAML](https://yaml.org/) configuration has:
+The [YAML](https://yaml.org/) configuration has:
 
 - `spring.datasource.url` : URL of the database connection
 - `spring.datasource.url` : database username
@@ -816,7 +816,7 @@ public class PlayerBean {
 }
 ```
 
-We can see that the entity class has a number of annotations that give Hibernate additional information to bind the entity class to the table.
+We can see that the entity class has several annotations that give Hibernate additional information to bind the entity class to the table.
 
 - `@Entity` declares that `PlayerBean` is an entity class
 - `@Table` relates this entity class to the table `player_jpa` using the annotated attribute `name`
@@ -877,7 +877,7 @@ The `PlayerRepository` extends the interface JpaRepository used by Spring for JP
 
 In the SQL for the `getPlayersByLimit` annotation, `:limit` is called [named parameters]((https://docs.jboss.org/hibernate/orm/6.0/userguide/html_single/Hibernate_User_Guide.html#jpql-query-parameters)) in Hibernate, and Hibernate will automatically find and splice the parameter by name within the interface where the annotation resides. You can also use `@Param` to specify a different name than the parameter for injection.
 
-In `getPlayerAndLock` we use an annotation [@Lock](https://docs.spring.io/spring-data/jpa/docs/current/api/org/springframework/data/jpa/repository/Lock.html) which declares that locking is done here using pessimistic locks, for more information about other locking methods see [here](https://openjpa.apache.org/builds/2.2.2/apache-openjpa/docs/jpa_overview_em_locking.html). The `@Lock` annotation can only be used with `HQL`, otherwise an error will occur. If you want to use SQL directly for locking, you can use the annotation directly in the comments section:
+In `getPlayerAndLock` we use an annotation [@Lock](https://docs.spring.io/spring-data/jpa/docs/current/api/org/springframework/data/jpa/repository/Lock.html) which declares that locking is done here using pessimistic locks, for more information about other locking methods see [here](https://openjpa.apache.org/builds/2.2.2/apache-openjpa/docs/jpa_overview_em_locking.html). The `@Lock` annotation can only be used with `HQL`, otherwise, an error will occur. If you want to use SQL directly for locking, you can use the annotation directly in the comments section:
 
 ```java
 @Query(value = "SELECT * FROM player_jpa WHERE id = :id FOR UPDATE", nativeQuery = true)
@@ -891,7 +891,7 @@ The logic implementation layer: `service` package, contains the interfaces and l
 
 #### Interface
 
-The reason for defining a interface within the `PlayerService.java` file and implementing the interface instead of writing a class directly is to try to keep the example as close to actual use as possible and to reflect the [open-closed principle](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle) of the design. You can also omit this interface and inject the implementation class directly into the dependency class, but we don't recommend this.
+The reason for defining an interface within the `PlayerService.java` file and implementing the interface instead of writing a class directly is to try to keep the example as close to actual use as possible and to reflect the [open-closed principle](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle) of the design. You can also omit this interface and inject the implementation class directly into the dependency class, but we don't recommend this.
 
 ```java
 package com.pingcap.service;
@@ -1109,10 +1109,10 @@ public class PlayerController {
 
 - [@RestController](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html) declares the `PlayerController` as a [Web Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) and serializes the return value as `JSON` output.
 - [@RequestMapping](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html)  maps the URL endpoint to `/player`, i.e. this `Web Controller` only listens for requests under the `/player` URL.
-- `@Autowired` means `Spring` container can autowire relationships between collaborating beans. As you can see, we declare that we need a `PlayerService` object here, which is an interface, and we don't specify which implementation class to use. This is automatically assembled by Spring. For the rules of this assembly, see the article [The IoC container](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/beans.html) on Spirng's official website.
+- `@Autowired` means `Spring` container can autowire relationships between collaborating beans. As you can see, we declare that we need a `PlayerService` object here, which is an interface, and we don't specify which implementation class to use. This is automatically assembled by Spring. For the rules of this assembly, see the article [The IoC container](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/beans.html) on Spring's official website.
 - [@PostMapping](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PostMapping.html) declares that this function will respond to a [POST](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST) type request in HTTP.
     - `@RequestBody` declares that the entire HTTP payload is parsed here into the parameter named `playerList`.
-    - `@NonNull` declares that the parameter must not be null, otherwise it will return an error
+    - `@NonNull` declares that the parameter must not be null, otherwise, it will return an error
 - [@GetMapping](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/GetMapping.html) declares that this function will respond to a [GET](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET) type request in HTTP.
     - [@PathVariable](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PathVariable.html) shows that the annotation has placeholders like `{id}`, `{limit_size}` which will be bound to the variable annotated by `@PathVariable`, based on the annotation attribute name (variable name can be omitted, i.e. `@PathVariable(name="limit_size")` can be written as `@PathVariable("limit_size")`), which is the same as the variable name when not specified specifically
 - [@PutMapping](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PutMapping.html) declares that this function will respond to a [PUT](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT) type request in HTTP

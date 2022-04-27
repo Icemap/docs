@@ -6,7 +6,7 @@ title: Build a TiDB Cluster in TiDB Cloud(DevTier)
 
 # Build a TiDB Cluster in TiDB Cloud(DevTier)
 
-This page will guide you on the fastest way to get started with TiDB. You will use TiDB Cloud to create and launch a free TiDB cluster, and insert data using the TiDB SQL client. The data will then be read from the sample program.
+This page will guide you on the fastest way to get started with TiDB. You will use TiDB Cloud to create and launch a free TiDB cluster, and insert data using the TiDB SQL client. Then the data will be read from the sample program.
 
 If you need to start TiDB on your local machine, see [Starting TiDB Locally](https://docs.pingcap.com/tidb/stable/quick-start-with-tidb).
 

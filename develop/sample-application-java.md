@@ -15,7 +15,7 @@ This document will show you how to use TiDB and Java to build a simple CRUD appl
 
 > Tip:
 > 
-> If you want to write a TiDB application using Spring Boot, you can check [Build the TiDB Application using Spring Boot](sample-application-spring-boot.md)
+> If you want to write a TiDB application using Spring Boot, you can check to [Build the TiDB Application using Spring Boot](sample-application-spring-boot.md)
 
 ## Step 1. Launch your TiDB cluster
 
@@ -129,7 +129,7 @@ CREATE TABLE player (
 
 `JDBCExample.java` is the body of the `plain-java-jdbc` example program. Since TiDB is compatible with MySQL protocol, we need to initialize a MySQL protocol data source `MysqlDataSource` to connect to TiDB, and later, initialize `PlayerDAO` to manage data objects and make operations such as adding, deleting, and checking.
 
-`PlayerDAO` is a class used by programs to manage data objects.`DAO` means [Data Access Object](https://en.wikipedia.org/wiki/Data_access_object). In it we define a set of data manipulation methods to provide the ability to write data.
+`PlayerDAO` is a class used by programs to manage data objects.`DAO` means [Data Access Object](https://en.wikipedia.org/wiki/Data_access_object). In it, we define a set of data manipulation methods to provide the ability to write data.
 
 `PlayerBean` is a data entity class that is a mapping of database tables within the application. Each property of a `PlayerBean` corresponds to a field in the `player` table.
 

@@ -18,9 +18,9 @@ This guide will show how to quickly build an application using TiDB. Therefore, 
 
 ## TiDB Basics
 
-Before you start working with TiDB, you need to understand some important mechanics about how TiDB databases work:
+Before you start working with TiDB, you need to understand some important mechanics of how TiDB databases work:
 
-- Read the [TiDB Transaction Overview](https://docs.pingcap.com/tidb/stable/transaction-overview) to understand how TiDB transactions work or check out the [Transaction Notes for Application Developers](transaction-overview.md) to see what application developers need to know about the transactions part.
+- Read the [TiDB Transaction Overview](https://docs.pingcap.com/tidb/stable/transaction-overview) to understand how TiDB transactions work or check out the [Transaction Notes for Application Developers](transaction-overview.md) to see what application developers need to know about the part of the transaction.
 - In addition, you need to understand [The way applications interact with TiDB](#the-way-applications-interact-with-tidb)
 
 The following sections are written for application developers, but if you are interested in the inner workings of TiDB or want to get involved in TiDB development, then go read the [TiDB Kernel Development Guide](https://pingcap.github.io/tidb-dev-guide/) for more information about TiDB.
@@ -33,7 +33,7 @@ You can open a transaction using [BEGIN](https://docs.pingcap.com/tidb/stable/sq
 
 TiDB guarantees atomicity for you for all statements between the start of `BEGIN` and the end of `COMMIT` or `ROLLBACK`, that is, all statements during this period succeed or fail. This is used to ensure the data consistency you need for application development.
 
-If you are not sure what an `optimistic transaction` is, do ***NOT*** use it yet. Because the `optimistic transactions` requires that the application can correctly handle [all errors](https://docs.pingcap.com/tidb/stable/error-codes) returned by the `COMMIT` statement. If you are not sure how your application will handle them, just use a `pessimistic transaction`.
+If you are not sure what an `optimistic transaction` is, do ***NOT*** use it yet. Because the `optimistic transactions` require that the application can correctly handle [all errors](https://docs.pingcap.com/tidb/stable/error-codes) returned by the `COMMIT` statement. If you are not sure how your application will handle them, just use a `pessimistic transaction`.
 
 ## The way applications interact with TiDB
 

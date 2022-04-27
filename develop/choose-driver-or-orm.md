@@ -4,7 +4,7 @@ title: Choose Driver or ORM
 
 # Choose Driver or ORM
 
-TiDB is compatible with MySQL's protocol, but there are some features that are not compatible with MySQL, such as:
+TiDB is compatible with MySQL's protocol, but some features are not compatible with MySQL, such as:
 
 Unsupported features:
 
@@ -16,7 +16,7 @@ Features that are different from MySQL:
 
 - Auto-increment ID: In TiDB, auto-incremental columns are globally unique. They are incremental on a single TiDB server, but ***not*** necessarily incremental among multiple TiDB servers or allocated sequentially.
 
-Full compatibility differences can be found at: [MySQL Compatibility](https://docs.pingcap.com/tidb/stable/mysql-compatibility)
+Full compatibility differences can be found at [MySQL Compatibility](https://docs.pingcap.com/tidb/stable/mysql-compatibility)
 
 ## Java
 
@@ -50,7 +50,7 @@ Support level: `Full`
 
 > **Note:**
 >
-> Hibernate does [not support nested transactions](https://stackoverflow.com/questions/37927208/nested-transaction-in-spring-app-with-jpa-postgres) currently. And TiDB does [not support Savepoint](https://github.com/pingcap/tidb/issues/6840) in current version. If you are using a framework such as `Spring Data JPA`, do not use the `Propagation.NESTED` transaction propagation option in `@Transactional`, i.e.: `@Transactional( propagation = Propagation.NESTED)`
+> Hibernate does [not support nested transactions](https://stackoverflow.com/questions/37927208/nested-transaction-in-spring-app-with-jpa-postgres) currently. And TiDB does [not support Savepoint](https://github.com/pingcap/tidb/issues/6840) in the current version. If you are using a framework such as `Spring Data JPA`, do not use the `Propagation.NESTED` transaction propagation option in `@Transactional`, i.e.: `@Transactional( propagation = Propagation.NESTED)`
 >
 > You can use [this example](https://github.com/Icemap/tidb-savepoint) to quickly reproduce the output of TiDB and MySQL for Savepoint.
 
@@ -69,7 +69,7 @@ Support level: `Full`
 > id: 1, coins: 1, goods: 1
 > ```
 
-You can use [Gradle](https://gradle.org/install) or [Maven](https://maven.apache.org/install.html) to get all the dependencies of your application and will download all dependencies (include the indirect dependencies) for you, avoid to manage the complex dependencies manually. Note that the TiDB dialect is only supported in Hibernate `6.0.0.Beta2` and above.
+You can use [Gradle](https://gradle.org/install) or [Maven](https://maven.apache.org/install.html) to get all the dependencies of your application and will download all dependencies (including the indirect dependencies) for you, to avoid managing the complex dependencies manually. Note that the TiDB dialect is only supported in Hibernate `6.0.0.Beta2` and above.
 
 If you are using `Maven`, please add the following to your `<dependencies></dependencies>`:
 

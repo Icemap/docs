@@ -11,7 +11,7 @@ This page gives an overview of the database schema in TiDB. We will start from t
 > To avoid confusion with the general term, Here is a brief agreement on the term used in the database schema design documentation section:
 >
 > 1. To avoid confusion with the generic term [Database](https://en.wikipedia.org/wiki/Database), we will refer to the logical object as `Database`, TiDB will still use the `TiDB`, and the deployed instances of TiDB will be referred to as `Cluster`.
-> 2. Because TiDB uses a MySQL-compatible syntax, under this syntax, `Schema` represents a [generic term definition only](https://en.wiktionary.org/wiki/schema), and there is no `logical object definition`, can be found in this [official document](https://dev.mysql.com/doc/refman/8.0/en/create-database.html). Please note this difference if you are migrating from other databases that have Schema logical objects (e.g. [PostgreSQL](https://www.postgresql.org/docs/current/ddl-schemas.html), [Oracle](https://docs.oracle.com/en/database/oracle/oracle-database/21/tdddg/creating-managing-schema-objects.html), [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/relational-databases/security/authentication-access/create-a-database-schema?view=sql-server-ver15), etc.).
+> 2. Because TiDB uses a MySQL-compatible syntax, under this syntax, `Schema` represents a [generic term definition only](https://en.wiktionary.org/wiki/schema), and there is no `logical object definition`, that can be found in this [official document](https://dev.mysql.com/doc/refman/8.0/en/create-database.html). Please note this difference if you are migrating from other databases that have Schema logical objects (e.g. [PostgreSQL](https://www.postgresql.org/docs/current/ddl-schemas.html), [Oracle](https://docs.oracle.com/en/database/oracle/oracle-database/21/tdddg/creating-managing-schema-objects.html), [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/relational-databases/security/authentication-access/create-a-database-schema?view=sql-server-ver15), etc.).
 
 ## Database
 
@@ -21,13 +21,13 @@ TiDB clusters contain a database named `test`. However, we recommend that you cr
 
 ## Table
 
-A Table in the TiDB, is subordinate to a [Database](#database).
+A Table in the TiDB is subordinate to a [Database](#database).
 
 A table contains `rows`. Each value in each row of data belongs to a specific `column`. Each column allows only a single data type. Columns can be further qualified by adding [constraints](https://docs.pingcap.com/tidb/stable/constraints). You can also add [generated columns (experimental feature)](https://docs.pingcap.com/tidb/stable/generated-columns) for calculations.
 
 ## Index
 
-An index is a copy of rows in a single table, sorted by a column or set of columns.TiDB queries use indexes to find data in a table more efficiently, while giving values for specific columns. Each index is subordinate to a particular [table](#table).
+An index is a copy of rows in a single table, sorted by a column or set of columns.TiDB queries use indexes to find data in a table more efficiently while giving values for specific columns. Each index is subordinate to a particular [table](#table).
 
 There are two common types of indexes:
 
@@ -112,6 +112,4 @@ These are some of the common object size restrictions, please refer to [this doc
 
 ### 行数
 
-TiDB 可通过增加集群的节点数来支持任意数量的行，原理可阅读[此文档](https://docs.pingcap.com/zh/tidb/stable/tidb-best-practices)
-
-TiDB can support **any** number of rows by add nodes in the cluster, see [this document](https://docs.pingcap.com/tidb/stable/tidb-best-practices) for the mechanics.
+TiDB can support **any** number of rows by adding nodes in the cluster, see [this document](https://docs.pingcap.com/tidb/stable/tidb-best-practices) for the mechanics.

@@ -6,12 +6,12 @@ title: Connection Pools and Connection Parameter
 
 > **Note:**
 >
-> - Connection Pooling Parameters: `Configure the number of connections`, `Probe configuration` two sections from [Best Practices for Developing Java Applications with TiDB - Connection pool](https://docs.pingcap.com/tidb/stable/java-app-best-practices#connection-pool)
+> - Connection Pooling Parameters: `Configure the number of connections`, `Probe configuration` of two sections from [Best Practices for Developing Java Applications with TiDB - Connection pool](https://docs.pingcap.com/tidb/stable/java-app-best-practices#connection-pool)
 > - Connection Parameters from [Best Practices for Developing Java Applications with TiDB - JDBC](https://docs.pingcap.com/tidb/stable/java-app-best-practices#jdbc)
 
 ## Connection pool
 
-Building TiDB (MySQL) connections is relatively expensive (for OLTP scenarios at least), because in addition to building a TCP connection, connection authentication is also required. Therefore, the client usually saves the TiDB (MySQL) connections to the connection pool for reuse.
+Building TiDB (MySQL) connections are relatively expensive (for OLTP scenarios at least). Because in addition to building a TCP connection, connection authentication is also required. Therefore, the client usually saves the TiDB (MySQL) connections to the connection pool for reuse.
 
 Java has many connection pool implementations such as [HikariCP](https://github.com/brettwooldridge/HikariCP), [tomcat-jdbc](https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html), [druid](https://github.com/alibaba/druid), [c3p0](https://www.mchange.com/projects/c3p0/), and [dbcp](https://commons.apache.org/proper/commons-dbcp/). TiDB does not limit which connection pool you use, so you can choose whichever you like for your application.
 
@@ -19,14 +19,14 @@ Java has many connection pool implementations such as [HikariCP](https://github.
 
 It is a common practice that the connection pool size is well adjusted according to the application's own needs. Take HikariCP as an example:
 
-- `maximumPoolSize`: The maximum number of connections in the connection pool. If this value is too large, TiDB consumes resources to maintain useless connections. If this value is too small, the application gets slow connections. So configure this value for your own good. For details, see [About Pool Sizing](https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing).
+- `maximumPoolSize`: The maximum number of connections in the connection pool. If this value is too large, TiDB consumes resources to maintain useless connections. If this value is too small, the application gets slow connections. To configure values according to your servers. For details, see [About Pool Sizing](https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing).
 - `minimumIdle`: The minimum number of idle connections in the connection pool. It is mainly used to reserve some connections to respond to sudden requests when the application is idle. You can also configure it according to your application needs.
 
 The application needs to return the connection after finishing using it. It is also recommended that the application use the corresponding connection pool monitoring (such as `metricRegistry`) to locate the connection pool issue in time.
 
 ### Probe configuration
 
-The connection pool maintains persistent connections to TiDB. TiDB does not proactively close client connections by default (unless an error is reported), but generally there will be network proxies such as LVS or HAProxy between the client and TiDB. Usually, these proxies will proactively clean up connections that are idle for a certain period of time. In addition to paying attention to the idle configuration of the proxies, the connection pool also needs to keep alive or probe connections.
+The connection pool maintains persistent connections to TiDB. TiDB does not proactively close client connections by default (unless an error is reported), but generally, there will be network proxies such as LVS or HAProxy between the client and TiDB. Usually, these proxies will proactively clean up connections that are idle for a certain period. In addition to paying attention to the idle configuration of the proxies, the connection pool also needs to keep alive or probe connections.
 
 If you often see the following error in your Java application:
 
@@ -56,13 +56,9 @@ connections = ((core_count * 2) + effective_spindle_count)
 
 Explain the meaning of the parameters:
 
-- `connections`: 得出的连接数大小
-- `core_count`: CPU 核心数
-- `effective_spindle_count`: 直译为 `有效主轴数` ，实际上是说你有多少个硬盘(非 [SSD](https://en.wikipedia.org/wiki/Solid-state_drive))，因为每个旋转的硬盘可以被称为是一个旋转轴。例如，你使用的是一个有 16 个磁盘组成的 [RAID](https://en.wikipedia.org/wiki/RAID) 阵列的服务器，那么 `effective_spindle_count` 应为 16。此处经验公式，实际上是衡量你的服务器可以管理多少 I/O 并发请求，因为 `HDD` 通常只能串行请求。
-
 - `connections`: Size of connections obtained
 - `core_count`: Number of CPU cores
-- `effective_spindle_count`: It means how many hard drives (not [SSD](https://en.wikipedia.org/wiki/Solid-state_drive)) you have, because each spinning hard disk can be called a spindle. For example, if you are using a server with a RAID of 16 disks, the `effective_spindle_count` should be 16. The empirical formula here is actually a measure of how many concurrent I/O request your server can manage, because usually `HDD` can only handle one thing at a time
+- `effective_spindle_count`: It means how many hard drives (not [SSD](https://en.wikipedia.org/wiki/Solid-state_drive)) you have. Because each spinning hard disk can be called a spindle. For example, if you are using a server with a RAID of 16 disks, the `effective_spindle_count` should be 16. The empirical formula here is actually a measure of how many concurrent I/O requests your server can manage. Because usually, `HDD` can only handle one thing at a time
 
 In particular, at the bottom of this empirical formula, we also see a statement that:
 
@@ -82,8 +78,6 @@ This note states that:
 2. When data is fully cached, `effective_spindle_count` should be set to `0`. As the hit rate decreases, it will be closer to the actual number of `HDD`
 3. **There is no empirical formula based on `SSD`**
 
-这里的说明让我们在使用 SSD 时，需探求其他的经验公式。
-
 The instructions here let us explore additional empirical formulas when using SSDs.
 
 Our recommended formula for the number of connections size is:
@@ -98,7 +92,7 @@ Therefore, we can set the number of connections to `cores * 4` in the case of SS
 
 As you can see, what we get in the above [empirical formula](#empirical-formula) is a recommended initial value, if you need to get the best value on a specific machine, you need to get the best value by trying around the recommended value.
 
-There are some basic rules for obtaining this optimal value, which are listed below:
+There are some basic rules for obtaining this optimal value, which is listed below:
 
 1. If your network or storage latency is high, increase your maximum number of connections that can wait so that other threads can continue processing while the thread is blocked.
 2. If you have multiple services deployed on your server, and each service has a separate connection pool, consider the sum of their connection pools' maximum connections.
@@ -134,7 +128,7 @@ For batch inserts, you can use the [`addBatch`/`executeBatch` API](https://www.t
 
 #### Use `StreamingResult` to get the execution result
 
-In most scenarios, to improve execution efficiency, JDBC obtains query results in advance and save them in client memory by default. But when the query returns a super large result set, the client often wants the database server to reduce the number of records returned at a time, and waits until the client's memory is ready and it requests for the next batch.
+In most scenarios, to improve execution efficiency, JDBC obtains query results in advance and saves them in client memory by default. But when the query returns a super large result set, the client often wants the database server to reduce the number of records returned at a time and waits until the client's memory is ready and it requests for the next batch.
 
 Usually, there are two kinds of processing methods in JDBC:
 
