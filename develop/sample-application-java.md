@@ -33,6 +33,8 @@ Applicable scenario: Use a local Mac or single-instance Linux environment to qui
 
 1. Download and install TiUP.
 
+{{< copyable "shell-regular" >}}
+
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh
 ```
@@ -40,22 +42,28 @@ curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh
 2. Declare global environment variables.
 
 > **Note:**
-> 
+>
 > When TiUP is installed, you will be prompted for the absolute path of the corresponding `profile` file. Before executing the following `source` command, you need to modify the command according to the actual location of the `profile` file.
+
+{{< copyable "shell-regular" >}}
 
 ```shell
 source .bash_profile
 ```
 
 3. Execute the following command in the current session to start the cluster.
-   
+
 - Executing the `tiup playground` command directly runs the latest version of the TiDB cluster, with 1 TiDB, TiKV, PD, and TiFlash instance:
+
+{{< copyable "shell-regular" >}}
 
 ```shell
 tiup playground
 ```
 
 - You can also specify the TiDB version and the number of instances of each component. The command is similar to:
+
+{{< copyable "shell-regular" >}}
 
 ```shell
 tiup playground v5.4.0 --db 2 --pd 3 --kv 3
@@ -64,7 +72,7 @@ tiup playground v5.4.0 --db 2 --pd 3 --kv 3
 The above command downloads and launches a version of the cluster locally (for example, v5.4.0). The latest version can be executed by 
 `tiup list tidb` to check it out. The results of the operation will show how the cluster is accessed:
 
-```bash
+```
 CLUSTER START SUCCESSFULLY, Enjoy it ^-^
 To connect TiDB: mysql --comments --host 127.0.0.1 --port 4001 -u root -p (no password)
 To connect TiDB: mysql --comments --host 127.0.0.1 --port 4000 -u root -p (no password)
@@ -86,13 +94,17 @@ To view the Grafana: http://127.0.0.1:3000
 
 ### Step 2. Get the code
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 git clone https://github.com/pingcap-inc/tidb-example-java.git
 ```
 
 Enter the catalog `plain-java-jdbc`：
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 cd plain-java-jdbc
 ```
 
@@ -115,6 +127,8 @@ The catalog structure is shown below：
 
 `dbinit.sql` is the data table initialization statement:
 
+{{< copyable "sql" >}}
+
 ```sql
 USE test;
 DROP TABLE IF EXISTS player;
@@ -132,6 +146,8 @@ CREATE TABLE player (
 `PlayerDAO` is a class used by programs to manage data objects.`DAO` means [Data Access Object](https://en.wikipedia.org/wiki/Data_access_object). In it, we define a set of data manipulation methods to provide the ability to write data.
 
 `PlayerBean` is a data entity class that is a mapping of database tables within the application. Each property of a `PlayerBean` corresponds to a field in the `player` table.
+
+{{< copyable "" >}}
 
 ```java
 package com.pingcap;
@@ -562,13 +578,17 @@ public class JDBCExample
 
 When using JDBC, you need to initialize the database tables manually. If you have `mysql-client` installed locally and are using a local cluster, you can run it directly in the `plain-java-jdbc` directory：
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 make mysql
 ```
 
 Or directly execute:
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 mysql --host 127.0.0.1 --port 4000 -u root<src/main/resources/dbinit.sql
 ```
 
@@ -577,6 +597,8 @@ If you are not using a local cluster, or do not have `mysql-client` installed, c
 #### Step 3.2 TiDB Cloud Changing Parameters
 
 If you are using a non-local default cluster, TiDB Cloud or other remote cluster, change the parameters for Host / Post / User / Password in `JDBCExample.java`:
+
+{{< copyable "" >}}
 
 ```java
 mysqlDataSource.setServerName("localhost");
@@ -588,11 +610,15 @@ mysqlDataSource.setPassword("");
 
 If you set the password to `123456`, the connection string you get in TiDB Cloud is:
 
-```
+{{< copyable "shell-regular" >}}
+
+```shell
 mysql --connect-timeout 15 -u root -h tidb.e049234d.d40d1f8b.us-east-1.prod.aws.tidbcloud.com -P 4000 -p
 ```
 
 Then the parameter should be changed to:
+
+{{< copyable "" >}}
 
 ```java
 mysqlDataSource.setServerName("tidb.e049234d.d40d1f8b.us-east-1.prod.aws.tidbcloud.com");
@@ -626,7 +652,7 @@ There is a popular open source Java ORM named Hibernate, and Hibernate supports 
 
 Enter the catalog `plain-java-hibernate` ：
 
-```bash
+```shell
 cd plain-java-hibernate
 ```
 
@@ -648,6 +674,8 @@ The catalog structure is shown below：
 ```
 
 `hibernate.cfg.xml` is the Hibernate configuration file:
+
+{{< copyable "" >}}
 
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
@@ -680,6 +708,8 @@ The catalog structure is shown below：
 `PlayerDAO` is a class used by programs to manage data objects.`DAO` means [Data Access Object](https://en.wikipedia.org/wiki/Data_access_object). In it we define a set of data manipulation methods to provide the ability to write data. Compared to JDBC, Hibernate helps us to encapsulate a large number of operations such as object mapping, CRUD of basic objects, etc., which greatly simplifies the amount of code.
 
 `PlayerBean` is a data entity class that is a mapping of database tables within the application. Each property of a `PlayerBean` corresponds to a field in the `player` table. Compared to JDBC, Hibernate's `PlayerBean` entity class contains annotations to indicate mapping relationships in order to provide more information to Hibernate.
+
+{{< copyable "" >}}
 
 ```java
 package com.pingcap;
@@ -915,6 +945,8 @@ public class HibernateExample
 
 If you are using a non-local default cluster, TiDB Cloud or other remote cluster, change the hibernate.connection.url / hibernate.connection.username / hibernate.connection.password parameters in `hibernate.cfg.xml`.
 
+{{< copyable "" >}}
+
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
@@ -943,11 +975,15 @@ If you are using a non-local default cluster, TiDB Cloud or other remote cluster
 
 If you set the password to `123456`, the connection string you get in TiDB Cloud is:
 
-```
+{{< copyable "shell-regular" >}}
+
+```shell
 mysql --connect-timeout 15 -u root -h tidb.e049234d.d40d1f8b.us-east-1.prod.aws.tidbcloud.com -P 4000 -p
 ```
 
 Then the configuration file should be changed to:
+
+{{< copyable "" >}}
 
 ```xml
 <?xml version='1.0' encoding='utf-8'?>

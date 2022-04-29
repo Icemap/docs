@@ -73,6 +73,8 @@ You can use [Gradle](https://gradle.org/install) or [Maven](https://maven.apache
 
 If you are using `Maven`, please add the following to your `<dependencies></dependencies>`:
 
+{{< copyable "" >}}
+
 ```xml
 <dependency>
     <groupId>org.hibernate.orm</groupId>
@@ -88,6 +90,8 @@ If you are using `Maven`, please add the following to your `<dependencies></depe
 ```
 
 If you are using `Gradle`, please add the following to your `dependencies`:
+
+{{< copyable "" >}}
 
 ```gradle
 implementation 'org.hibernate:hibernate-core:6.0.0.CR2'

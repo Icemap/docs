@@ -12,7 +12,9 @@ TiDB supports the [MySQL Client/Server Protocol](https://dev.mysql.com/doc/inter
 
 You can use `MySQL Client` as a command line tool for `TiDB`. You can find the installation method for different operating systems in the [MySQL Shell documentation](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-install.html). After the installation you can connect to TiDB using the following command-line:
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 mysql --host <tidb_server_host> --port 4000 -u root -p --comments
 ```
 
@@ -25,6 +27,8 @@ mysql --host <tidb_server_host> --port 4000 -u root -p --comments
 You can connect to TiDB using the [JDBC](https://dev.mysql.com/doc/connector-j/8.0/en/) driver, which requires creating a `MysqlDataSource` or `MysqlConnectionPoolDataSource` object (both of which implement the `DataSource` interface) and set the connection string using the `setURL` function.
 
 For example:
+
+{{< copyable "" >}}
 
 ```java
 MysqlDataSource mysqlDataSource = new MysqlDataSource();
@@ -49,6 +53,8 @@ You can connect to TiDB using the [Hibernate ORM](https://hibernate.org/orm/). S
 
 For example, if you use the `hibernate.cfg.xml` configuration file, then your configuration file should be:
 
+{{< copyable "" >}}
+
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
@@ -64,6 +70,8 @@ For example, if you use the `hibernate.cfg.xml` configuration file, then your co
 ```
 
 Subsequently, the configuration file is read using the code to obtain the `SessionFactory` object:
+
+{{< copyable "" >}}
 
 ```java
 SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();

@@ -36,17 +36,19 @@ If you need to start TiDB on your local machine, see [Starting TiDB Locally](htt
 
 <SimpleTab>
 
-<div label="Mac">
+<div label="macOS">
 
 If you don't have homebrew, please move to the [official website](https://brew.sh/index) to install
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 brew install mysql-client
 ```
 
 In the command line output of the installation, you get the following information:
 
-```bash
+```
 mysql-client is keg-only, which means it was not symlinked into /opt/homebrew,
 because it conflicts with mysql (which contains client libraries).
 
@@ -60,20 +62,24 @@ For compilers to find mysql-client you may need to set:
 
 Run this line (if the command line output is inconsistent with the documentation here, please refer to the command line output):
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 echo 'export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"' >> ~/.zshrc
 ```
 
 Once done, take the configuration file into effect (for example `~/.zshrc`) and verify that the MySQL client is installed successfully:
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 source ~/.zshrc
 mysql --version
 ```
 
 Expect output similar to the following:
 
-```bash
+```
 mysql  Ver 8.0.28 for macos12.0 on arm64 (Homebrew)
 ```
 
@@ -83,19 +89,23 @@ mysql  Ver 8.0.28 for macos12.0 on arm64 (Homebrew)
 
 Take CentOS7 as an example:
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 yum install mysql
 ```
 
 Once done, verify that the MySQL client is installed successfully:
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 mysql --version
 ```
 
 Expect output similar to the following:
 
-```bash
+```
 mysql  Ver 15.1 Distrib 5.5.68-MariaDB, for Linux (x86_64) using readline 5.1
 ```
 
@@ -105,7 +115,9 @@ mysql  Ver 15.1 Distrib 5.5.68-MariaDB, for Linux (x86_64) using readline 5.1
 
 2. Run the connection string obtained in [step 1](#step-1-create-a-free-cluster).
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 mysql --connect-timeout 15 -u root -h <host> -P 4000 -p
 ```
 
@@ -115,7 +127,9 @@ mysql --connect-timeout 15 -u root -h <host> -P 4000 -p
 
 1. Clone the tidb-example-java project
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 git clone https://github.com/pingcap-inc/tidb-example-java.git
 ```
 
@@ -133,6 +147,8 @@ No changes required
 
 Change the parameters for Host / Post / User / Password in plain-java-jdbc/src/main/java/com/pingcap/JDBCExample.java:
 
+{{< copyable "" >}}
+
 ```java
 mysqlDataSource.setServerName("localhost");
 mysqlDataSource.setPortNumber(4000);
@@ -143,11 +159,15 @@ mysqlDataSource.setPassword("");
 
 If the password you set is `123456`, the connection string you get in TiDB Cloud is:
 
+{{< copyable "" >}}
+
 ```java
 mysql --connect-timeout 15 -u root -h tidb.e049234d.d40d1f8b.us-east-1.prod.aws.tidbcloud.com -P 4000 -p
 ```
 
 Then here you should change the parameter to:
+
+{{< copyable "" >}}
 
 ```java
 mysqlDataSource.setServerName("tidb.e049234d.d40d1f8b.us-east-1.prod.aws.tidbcloud.com");

@@ -30,6 +30,8 @@ Applicable scenario: Use a local Mac or single-instance Linux environment to qui
 
 1. Download and install TiUP.
 
+{{< copyable "shell-regular" >}}
+
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh
 ```
@@ -40,6 +42,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh
 > 
 > When TiUP is installed, you will be prompted for the absolute path of the corresponding `profile` file. Before executing the following `source` command, you need to modify the command according to the actual location of the `profile` file.
 
+{{< copyable "shell-regular" >}}
+
 ```shell
 source .bash_profile
 ```
@@ -48,11 +52,15 @@ source .bash_profile
    
 - Executing the `tiup playground` command directly runs the latest version of the TiDB cluster, with 1 TiDB, TiKV, PD, and TiFlash instance:
 
+{{< copyable "shell-regular" >}}
+
 ```shell
 tiup playground
 ```
 
 - You can also specify the TiDB version and the number of instances of each component. The command is similar to:
+
+{{< copyable "shell-regular" >}}
 
 ```shell
 tiup playground v5.4.0 --db 2 --pd 3 --kv 3
@@ -61,7 +69,7 @@ tiup playground v5.4.0 --db 2 --pd 3 --kv 3
 The above command downloads and launches a version of the cluster locally (for example, v5.4.0). The latest version can be executed by 
 `tiup list tidb` to check it out. The results of the operation will show how the cluster is accessed:
 
-```bash
+```
 CLUSTER START SUCCESSFULLY, Enjoy it ^-^
 To connect TiDB: mysql --comments --host 127.0.0.1 --port 4001 -u root -p (no password)
 To connect TiDB: mysql --comments --host 127.0.0.1 --port 4000 -u root -p (no password)
@@ -89,13 +97,17 @@ This sample application uses `Maven` to manage the application's dependencies; S
 
 Here is how to install `Maven` from the command line.
 
-- MacOS:
+- macOS:
+
+{{< copyable "shell-regular" >}}
 
 ```
 brew install maven
 ```
 
 - Installation on Debian-based Linux distributions (e.g. Ubuntu, etc.):
+
+{{< copyable "shell-regular" >}}
 
 ```
 apt-get install maven
@@ -105,11 +117,15 @@ apt-get install maven
 
 1. `dnf` software package manager
 
+{{< copyable "shell-regular" >}}
+
 ```
 dnf install maven
 ```
 
 2. `yum` software package manager
+
+{{< copyable "shell-regular" >}}
 
 ```
 yum install maven
@@ -170,6 +186,8 @@ Subsequently, the project can be used normally, but only in the same way that `T
 
 1. The `jakarta` packages introduced within `Spring Data JPA` are excluded as shown in this [dependency file](https://github.com/pingcap-inc/tidb-example-java/blob/main/spring-jpa-hibernate/pom.xml#L26):
 
+{{< copyable "" >}}
+
 ```xml
 <dependency>
    <groupId>org.springframework.boot</groupId>
@@ -178,6 +196,8 @@ Subsequently, the project can be used normally, but only in the same way that `T
 ```
 
 Changed to:
+
+{{< copyable "" >}}
 
 ```xml
 <dependency>
@@ -193,6 +213,8 @@ Changed to:
 ```
 
 2. Then introduce `Hibernate` dependencies from version `6.0.0.Beta2` and above, as shown in this [dependency file](https://github.com/pingcap-inc/tidb-example-java/blob/main/spring-jpa-hibernate/pom.xml#L53), using version `6.0.0.CR2` as an example:
+
+{{< copyable "" >}}
 
 ```xml
 <dependency>
@@ -214,6 +236,8 @@ If you want to learn more about the code of this application, you can see the [I
 
 If you are using a non-local default cluster, TiDB Cloud or other remote cluster, change the `application.yml` (located in `src/main/resources`) for spring.datasource.url / spring.datasource.username / spring.datasource.password parameters.
 
+{{< copyable "" >}}
+
 ```yaml
 spring:
   datasource:
@@ -230,11 +254,15 @@ spring:
 
 If you set the password to `123456`, the connection string you get in TiDB Cloud is:
 
-```
+{{< copyable "shell-regular" >}}
+
+```shell
 mysql --connect-timeout 15 -u root -h tidb.e049234d.d40d1f8b.us-east-1.prod.aws.tidbcloud.com -P 4000 -p
 ```
 
 Then the configuration file should be changed to:
+
+{{< copyable "" >}}
 
 ```yaml
 spring:
@@ -254,13 +282,17 @@ spring:
 
 Open a terminal and make sure you are in the `spring-jpa-hibernate` directory, or if you are not already in this directory, use the command to enter.
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 cd <path>/tidb-example-java/spring-jpa-hibernate
 ```
 
 #### Build and run with Make (recommended)
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 make
 ```
 
@@ -270,13 +302,17 @@ We recommend that you build and run using the `make` command, but if you prefer 
 
 Clear cache and package:
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 mvn clean package
 ```
 
 Running applications with JAR files:
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 java -jar target/spring-jpa-hibernate-0.0.1.jar
 ```
 
@@ -380,7 +416,9 @@ Of course, you can also use curl to make requests directly.
 
 We use the `Post` method to request the `/player` endpoint request to create players, i.e.
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 curl --location --request POST 'http://localhost:8080/player/' --header 'Content-Type: application/json' --data-raw '[{"coins":100,"goods":20}]'
 ```
 
@@ -394,7 +432,9 @@ Here we use JSON as the load of our message. It means that we need to create a p
 
 We use the `Get` method to request the `/player` endpoint request to get the player information, additionally we need to give the player `id` parameter in the path, i.e. `/player/{id}`, for example when requesting a player with `id` 1.
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 curl --location --request GET 'http://localhost:8080/player/1'
 ```
 
@@ -412,7 +452,9 @@ The return value is the player's information:
 
 We use the `Get` method to request the `/player/limit` endpoint request to get player information, additionally we need to give the total number of player information to limit the query on the path, i.e. `/player/limit/{limit}`, for example when requesting information for up to 3 players.
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 curl --location --request GET 'http://localhost:8080/player/limit/3'
 ```
 
@@ -442,7 +484,9 @@ The return value is a list of player information:
 
 We use the `Get` method to request the `/player/page` endpoint request to paginate the player information, additionally we need to use the URL parameter, for example when requesting a page number `index` of 0 and a maximum request `size` of 2 per page.
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 curl --location --request GET 'http://localhost:8080/player/page?index=0&size=2'
 ```
 
@@ -494,7 +538,9 @@ The return value is the page with `index` 0, with 2 lists of player information 
 
 We use the `Get` method to request the `/player/count` endpoint request to get the number of players:
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 curl --location --request GET 'http://localhost:8080/player/count'
 ```
 
@@ -508,7 +554,9 @@ The return value is the number of players:
 
 We initiate a transaction between players by requesting the `/player/trade` endpoint request using the `Put` method, i.e.
 
-```bash
+{{< copyable "shell-regular" >}}
+
+```shell
 curl --location --request PUT 'http://localhost:8080/player/trade' \
   --header 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'sellID=1' \
@@ -538,7 +586,7 @@ We have written the request process as a [shell script](https://github.com/pingc
 
 You can run this script with `make request` or `./request.sh` command and the result should look like this:
 
-```bash
+```
 cheese@CheesedeMacBook-Pro spring-jpa-hibernate % make request
 ./request.sh
 loop to create 10 players:
@@ -606,6 +654,8 @@ The catalog tree for this example project is shown below (with the parts that ar
 #### Maven Configuration
 
 The `pom.xml` file is a Maven configuration file that declares the project's Maven dependencies, packaging methods, packaging information, etc. You can replicate the process of generating this configuration file by [create the same dependency blank application](#create-the-same-dependency-blank-application-optional), or copying it directly to your project.
+
+{{< copyable "" >}}
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -731,6 +781,8 @@ The [YAML](https://yaml.org/) configuration has:
 
 Entry point `App.java`
 
+{{< copyable "" >}}
+
 ```java
 package com.pingcap;
 
@@ -757,6 +809,8 @@ The `dao` (Data Access Object) package, implements the persistence of data objec
 #### Entity objects
 
 The `PlayerBean.java` file is an entity object, which corresponds to a table in the database
+
+{{< copyable "" >}}
 
 ```java
 package com.pingcap.dao;
@@ -829,6 +883,8 @@ We can see that the entity class has several annotations that give Hibernate add
 
 To abstract the database layer, Spring applications use the [Repository](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories) interface, or a sub-interface of the `Repository`. This interface maps to a database object, such as a table. JPA will implement some methods for us, such as [INSERT](https://docs.pingcap.com/tidb/stable/sql-statement-insert), or [SELECT](https://docs.pingcap.com/tidb/stable/sql-statement-select), etc.
 
+{{< copyable "" >}}
+
 ```java
 package com.pingcap.dao;
 
@@ -879,6 +935,8 @@ In the SQL for the `getPlayersByLimit` annotation, `:limit` is called [named par
 
 In `getPlayerAndLock` we use an annotation [@Lock](https://docs.spring.io/spring-data/jpa/docs/current/api/org/springframework/data/jpa/repository/Lock.html) which declares that locking is done here using pessimistic locks, for more information about other locking methods see [here](https://openjpa.apache.org/builds/2.2.2/apache-openjpa/docs/jpa_overview_em_locking.html). The `@Lock` annotation can only be used with `HQL`, otherwise, an error will occur. If you want to use SQL directly for locking, you can use the annotation directly in the comments section:
 
+{{< copyable "" >}}
+
 ```java
 @Query(value = "SELECT * FROM player_jpa WHERE id = :id FOR UPDATE", nativeQuery = true)
 ```
@@ -892,6 +950,8 @@ The logic implementation layer: `service` package, contains the interfaces and l
 #### Interface
 
 The reason for defining an interface within the `PlayerService.java` file and implementing the interface instead of writing a class directly is to try to keep the example as close to actual use as possible and to reflect the [open-closed principle](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle) of the design. You can also omit this interface and inject the implementation class directly into the dependency class, but we don't recommend this.
+
+{{< copyable "" >}}
 
 ```java
 package com.pingcap.service;
@@ -956,6 +1016,8 @@ public interface PlayerService {
 #### Implementation (Important)
 
 The `PlayerService.java` file implements the `PlayerService` interface, where all our data processing logic is written.
+
+{{< copyable "" >}}
 
 ```java
 package com.pingcap.service.impl;
@@ -1048,6 +1110,8 @@ Of the implementation classes, the `buyGoods` function is the one to focus on, a
 ### External HTTP Interface
 
 The `controller` package exposes the HTTP interface to the outside world and allows access to the service via the [REST API](https://www.redhat.com/en/topics/api/what-is-a-rest-api#).
+
+{{< copyable "" >}}
 
 ```java
 package com.pingcap.controller;
